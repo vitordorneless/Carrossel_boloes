@@ -1,52 +1,51 @@
-
-
 services:
-  # Servidor Web + PHP + Laravel
   app:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: laravel_app
     restart: unless-stopped
+    working_dir: /var/www/html
     ports:
       - "8000:80"
     volumes:
-      - .:/var/www/html
-      - ./docker/apache/000-default.conf:/etc/apache2/sites-available/000-default.conf
-    depends_on:
-      - db
-      - rabbitmq
+      - ./:/var/www/html
     networks:
       - laravel_network
 
-  # Banco de Dados MySQL
   db:
     image: mysql:latest
     container_name: laravel_db
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: ${DB_DATABASE:-laravel}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
-      MYSQL_PASSWORD: ${DB_PASSWORD:-root}
-      MYSQL_USER: ${DB_USERNAME:-laravel}
-    ports:
-      - "3306:3306"
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
     volumes:
       - dbdata:/var/lib/mysql
     networks:
       - laravel_network
 
-  # Fila de Mensagens RabbitMQ (com painel de gerenciamento)
   rabbitmq:
     image: rabbitmq:management
     container_name: laravel_rabbitmq
     restart: unless-stopped
     ports:
-      - "5672:5672"   # Porta para conexões de AMQP
-      - "15672:15672" # Painel Web Management
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - laravel_network
+
+  node:
+    image: node:22-alpine
+    container_name: laravel_node
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    command: npm run dev
+    ports:
+      - "5173:5173"
     networks:
       - laravel_network
 
