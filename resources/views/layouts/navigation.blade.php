@@ -24,6 +24,9 @@
                     <x-nav-link :href="route('lottery-accumulateds.index')" :active="request()->routeIs('lottery-accumulateds.*')">
                         {{ __('Acumulados') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('lottery-pools.index')" :active="request()->routeIs('lottery-pools.*')">
+                        {{ __('Bolões') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -87,6 +90,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('lottery-accumulateds.index')" :active="request()->routeIs('lottery-accumulateds.*')">
                 {{ __('Acumulados') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('lottery-pools.index')" :active="request()->routeIs('lottery-pools.*')">
+                {{ __('Bolões') }}
             </x-responsive-nav-link>
         </div>
 
