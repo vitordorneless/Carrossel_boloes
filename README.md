@@ -1,58 +1,95 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🎰 Carrossel de Bolões
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistema web completo desenvolvido em **Laravel** com autenticação **Laravel Breeze**, estilizado com **Tailwind CSS** e rodando sobre um ambiente conteinerizado com **Docker**. O sistema gerencia loterias, dias de sorteio, valores acumulados e o cadastro central de bolões.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Tecnologias Utilizadas
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **PHP 8.x** / **Laravel 10+**
+- **MySQL** (Banco de dados relacional via Docker)
+- **Node.js** (Gerenciamento de assets com Vite e Tailwind CSS)
+- **Docker & Docker Compose** (Ambiente de desenvolvimento isolado)
+- **Laravel Breeze** (Autenticação e painel administrativo)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## ⚙️ Pré-requisitos e Instalação do Ambiente
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Certifique-se de ter o **Docker** e o **Docker Compose** instalados na sua máquina.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1. Clone o repositório e suba os containers do projeto:
+   
+docker compose up -d
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+2. Instale as dependências da aplicação (caso ainda não tenha feito):   
 
-## Agentic Development
+docker compose exec app composer install
+docker compose run --npm run install
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+3. Execute as migrações do banco de dados:
 
-```bash
-composer require laravel/boost --dev
+docker compose exec app php artisan migrate
 
-php artisan boost:install
-```
+4. Para compilar os assets estáticos do Tailwind/Vite e garantir que o layout carregue corretamente sem o servidor dev ativo:
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+docker compose run --rm node npm run build
 
-## Contributing
+Módulos Implementados (CRUDs do Painel)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+O painel administrativo protegido por autenticação conta com os seguintes módulos operacionais integrados diretamente à barra de navegação principal:
+1. 🎲 Jogos da Loteria (/lottery-games)
 
-## Code of Conduct
+Gerenciamento base dos tipos de loteria disponíveis (Ex: Mega-Sena, Quina, Lotofácil).
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+    Campos: name (Nome do jogo), is_active (Status).
 
-## Security Vulnerabilities
+2. 📅 Dias de Sorteio (/lottery-draw-days)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Vinculação dos dias da semana em que cada jogo da loteria é sorteado.
 
-## License
+    Campos: lottery_game_id (Relação com o jogo) e marcadores booleanos para os 7 dias da semana (Domingo a Sábado).
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+3. 💰 Valores Acumulados (/lottery-accumulateds)
+
+Controle do prêmio acumulado atual de cada jogo da loteria. Possui máscara monetária em JavaScript no formato brasileiro (R$ 0,00).
+
+    Lógica de Negócio: O sistema mantém apenas o acumulado mais recente por jogo. Ao cadastrar um novo valor para um jogo existente, o anterior é substituído automaticamente.
+
+    Campos: lottery_game_id, amount (Valor decimal).
+
+4. 🎟️ Cadastro de Bolões (/lottery-pools)
+
+O core do sistema. Unifica as tabelas anteriores para montar a oferta do bolão.
+
+    Campos:
+
+        lottery_game_id (ID do Jogo)
+
+        lottery_draw_day_id (ID do dia de sorteio configurado)
+
+        lottery_accumulated_id (ID do acumulado opcional)
+
+        draw_date (Data específica do sorteio)
+
+        quota_value (Valor da cota com máscara monetária)
+
+        quota_quantity (Quantidade total de cotas disponíveis)
+
+        numbers_count (Quantidade de dezenas jogadas)
+
+        whatsapp_link (Link direto para atendimento/venda no WhatsApp)
+
+        caixa_link (Link opcional para o site oficial da Loterias Caixa)
+
+🛠️ Comandos Úteis do Dia a Dia
+
+    Subir os containers: docker compose up -d
+
+    Parar os containers: docker compose down
+
+    Limpar todos os caches do Laravel: docker compose exec app php artisan optimize:clear
+
+    Rodar novas migrations: docker compose exec app php artisan migrate
+
+    Recompilar assets de produção (Vite): docker compose run --rm node npm run build
