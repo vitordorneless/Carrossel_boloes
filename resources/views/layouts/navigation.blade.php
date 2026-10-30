@@ -18,6 +18,9 @@
                     <x-nav-link :href="route('lottery-games.index')" :active="request()->routeIs('lottery-games.*')">
                         {{ __('Jogos da Loteria') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('lottery-draw-days.index')" :active="request()->routeIs('lottery-draw-days.*')">
+                        {{ __('Dias de Sorteio') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -75,6 +78,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('lottery-games.index')" :active="request()->routeIs('lottery-games.*')">
                 {{ __('Jogos da Loteria') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('lottery-draw-days.index')" :active="request()->routeIs('lottery-draw-days.*')">
+                {{ __('Dias de Sorteio') }}
             </x-responsive-nav-link>
         </div>
 

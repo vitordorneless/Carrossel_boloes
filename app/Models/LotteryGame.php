@@ -10,4 +10,9 @@ class LotteryGame extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'is_active'];
+
+    public function drawDays()
+{
+    return $this->hasOne(LotteryDrawDay::class);
+}
 }
