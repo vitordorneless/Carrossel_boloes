@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LotteryGameController;
 use App\Http\Controllers\LotteryDrawDayController;
+use App\Http\Controllers\LotteryAccumulatedController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -25,6 +26,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('lottery-draw-days', LotteryDrawDayController::class)->except(['create', 'show', 'edit']);
+});
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('lottery-accumulateds', LotteryAccumulatedController::class)->except(['create', 'show', 'edit']);
 });
 
 require __DIR__.'/auth.php';
