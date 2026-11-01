@@ -37,4 +37,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('lottery-pools', LotteryPoolController::class)->except(['create', 'show', 'edit']);
 });
 
+use App\Http\Controllers\HomeController;
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
 require __DIR__.'/auth.php';
