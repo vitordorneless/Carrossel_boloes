@@ -34,7 +34,7 @@
             <!-- Título Principal -->
             <div class="text-center mb-12">
                 <h2 class="text-4xl font-extrabold text-gray-900 tracking-tight sm:text-5xl">
-                    Bolões da Lotérica Mel
+                    Bolões da Lotérica Mel - 017858
                 </h2>
                 <p class="mt-3 text-lg text-gray-500">
                     Confira nossos bolões disponíveis, escolha sua sorte e participe!
@@ -91,13 +91,13 @@
                             <div class="space-y-3 pt-4 border-t border-gray-100">
                                 <!-- Botão WhatsApp -->
                                 <a href="{{ $pool->whatsapp_link }}" target="_blank" style="background-color: #25D366;" class="w-full flex items-center justify-center text-white font-bold py-2.5 px-4 rounded-xl text-sm transition-opacity hover:opacity-90 shadow-sm">
-                                    Reserve por aqui
+                                    Reserve por aqui WhatsApp
                                 </a>
 
                                 <!-- Botão Loterias Caixa -->
                                 @if($pool->caixa_link)
                                     <a href="{{ $pool->caixa_link }}" target="_blank" style="background-color: #0066B3;" class="w-full flex items-center justify-center text-white font-bold py-2.5 px-4 rounded-xl text-sm transition-opacity hover:opacity-90 shadow-sm">
-                                        Compre na nossa loja
+                                        Compre na nossa loja Loterias Caixa
                                     </a>
                                 @endif
                             </div>
